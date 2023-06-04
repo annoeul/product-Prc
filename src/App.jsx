@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
+import * as api from "./apis"
 
 function CreateCategoryAndProducts() {
   const [categoryName, setCategoryName] = useState("")
@@ -16,11 +16,11 @@ function CreateCategoryAndProducts() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:9090/categories")
-      setCategories(response.data)
+      const data = await api.fetchCategories()
+      setCategories(data)
     } catch (error) {
       console.error(error)
-      setMessage("카테고리 조회에 실패했습니다.")
+      setMessage(error.message)
     }
   }
 
@@ -31,11 +31,20 @@ function CreateCategoryAndProducts() {
   const handleCategoryChange = (event) => {
     const categoryId = event.target.value
     setCategoryId(categoryId)
+  }
 
-    // 선택한 카테고리의 아이템을 콘솔에 출력
-    const selectedCategory = categories.find((category) => category.id === Number(categoryId))
-    if (selectedCategory) {
-      console.log(selectedCategory.products)
+  const handleCategorySubmit = async (event) => {
+    event.preventDefault()
+
+    try {
+      const response = await api.createCategory(categoryName)
+      console.log(response)
+      setMessage("카테고리가 생성되었습니다.")
+      setCategoryName("")
+      fetchCategories()
+    } catch (error) {
+      console.error(error)
+      setMessage(error.message)
     }
   }
 
@@ -51,42 +60,19 @@ function CreateCategoryAndProducts() {
     setProductPrice(event.target.value)
   }
 
-  const handleCategorySubmit = async (event) => {
-    event.preventDefault()
-
-    try {
-      const response = await axios.post("http://localhost:9090/categories", {
-        name: categoryName,
-      })
-
-      console.log(response.data)
-
-      setMessage("카테고리가 생성되었습니다.")
-      setCategoryName("")
-      fetchCategories()
-    } catch (error) {
-      console.error(error)
-      setMessage("카테고리 생성에 실패했습니다.")
-    }
-  }
-
   const handleProductSubmit = async (event) => {
     event.preventDefault()
 
     try {
-      const response = await axios.post("http://localhost:9090/products", {
-        name: productName,
-        description: productDescription,
-        price: productPrice,
-        categoryId: categoryId,
-      })
-
-      console.log(response.data)
-
+      const response = await api.createProduct(productName, productDescription, productPrice, categoryId)
+      console.log(response)
       setMessage("상품이 생성되었습니다.")
+      setProductName("")
+      setProductDescription("")
+      setProductPrice("")
     } catch (error) {
       console.error(error)
-      setMessage("상품 생성에 실패했습니다.")
+      setMessage(error.message)
     }
   }
 
