@@ -3,6 +3,44 @@
     {
       "name": "커피",
       "id": 1
+    },
+    {
+      "name": "음료",
+      "id": 2
+    },
+    {
+      "name": "디저트",
+      "id": 3
+    }
+  ],
+  "products": [
+    {
+      "name": "아메리카노",
+      "description": "아메리카노임",
+      "price": "11111",
+      "categoryId": "1",
+      "id": 1
+    },
+    {
+      "name": "아메리카노2",
+      "description": "아메리카노임2",
+      "price": "2222",
+      "categoryId": "1",
+      "id": 2
+    },
+    {
+      "name": "음료",
+      "description": "음료임11",
+      "price": "123",
+      "categoryId": "2",
+      "id": 3
+    },
+    {
+      "name": "디저트",
+      "description": "디저트임",
+      "price": "333",
+      "categoryId": "3",
+      "id": 4
     }
   ]
 }
